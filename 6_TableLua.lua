@@ -44,7 +44,12 @@ end
 print("==============");
 
 tab3[2]=nil;
-
+print(#tab3);
+for key,val in pairs(tab3) do
+print(key.."------"..val);
+end
+table.remove(tab3,2);
+print(#tab3);
 for key,val in pairs(tab3) do
 print(key.."------"..val);
 end
