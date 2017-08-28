@@ -36,3 +36,18 @@ account = "admin";
 password = "******";
 ans = string.format("account:%s password:%s",account,password);
 print(ans);
+
+
+print("===================================")
+
+print(string.char(97,65,48,0100));
+print(string.byte("ASdsa1"));
+print(string.byte("ASdsa1",1));
+print(string.byte("ASdsa1",2));
+print(string.len("ASdsa1"));
+print(#"ASdsa1");
+print(string.rep("ABCD",4));
+
+for item in string.gmatch("Hello World Lua Yoooooooo yoyo qie ke nao","%a+")do
+print(item);
+	end
