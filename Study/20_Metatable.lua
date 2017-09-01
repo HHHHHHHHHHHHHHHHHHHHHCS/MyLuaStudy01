@@ -95,3 +95,36 @@ mytable[10]="Scala";
 print(newTable[10]);
 mytable[11]="Python";
 print(newTable[11]);
+
+print("=========================");
+
+-- __newindex  当我给表的 一个缺少索引的KEY 赋值的时候  触发事件而不进行赋值操作
+-- 如果执意要赋值 用 rawset(table, key, value)
+mytable = {"Lua","Java","C#","C++","Javascript"};
+mymetaTable = 
+{
+	__add = function(tab,newtab )
+
+	print("主表:",tab,"加表:",newtab);
+
+	for k,v in pairs(newtab) do
+		--tab[k]=v;
+		table.insert(tab,v);
+	end
+
+	return tab;
+end
+
+}
+
+newtab = {"PHP","C"};
+
+mytable=setmetatable(mytable,mymetaTable);
+
+v=mytable+newtab;
+print(table.concat( v, " , " ));
+
+print("-----------------------------------");
+
+v2=newtab+mytable;
+print(table.concat( v2, " , " ));
