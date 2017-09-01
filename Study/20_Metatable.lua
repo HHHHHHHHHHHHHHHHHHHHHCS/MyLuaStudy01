@@ -32,7 +32,7 @@ print(getmetatable(tab));
 
 print("=========================");
 
-
+-- 如果 使用 __index  访问不存在的索引的时候 调用
 mymetaTable = 
 {
 	__index = 
@@ -50,3 +50,48 @@ tab= setmetatable({"Lua","Java","C#","C++","Javascript"},mymetaTable);
 print(tab[1]);
 print(tab[8]);
 print(tab[10]);
+
+print("=========================");
+
+
+
+-- __newindex  当我给表的 一个缺少索引的KEY 赋值的时候  触发事件而不进行赋值操作
+-- 如果执意要赋值 用 rawset(table, key, value)
+mytable = {"Lua","Java","C#","C++","Javascript"};
+mymetaTable = 
+{
+	__newindex = function(tab,key,value )
+	print("修改的Table:",tab,"修改的Key:"..key,"修改的Value:"..value);
+	if(key==11) then
+		rawset(tab, key, value)
+	end
+end
+
+}
+
+mytable=setmetatable(mytable,mymetaTable);
+
+mytable[2]="Ruby";
+mytable[10]="Scala";
+print(mytable[10]);
+mytable[11]="Python";
+print(mytable[11]);
+
+print("--------------------------");
+
+--当然也可以 把不存在的索引 放在 新的表里面
+mytable = {"Lua","Java","C#","C++","Javascript"};
+newTable = {};
+mymetaTable = 
+{
+	__newindex = newTable;
+}
+
+mytable=setmetatable(mytable,mymetaTable);
+
+mytable[2]="Ruby";
+print(newTable[2]);
+mytable[10]="Scala";
+print(newTable[10]);
+mytable[11]="Python";
+print(newTable[11]);
