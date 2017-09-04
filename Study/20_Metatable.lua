@@ -128,3 +128,19 @@ print("-----------------------------------");
 
 v2=newtab+mytable;
 print(table.concat( v2, " , " ));
+
+print("=========================");
+
+
+
+mytable = {"Lua","Java","C#","C++","Javascript"};
+mymetaTable = 
+{
+	__call = function(tab,arg1,arg2,arg3,arg3 )
+	print("主表:",tab,"args:",arg1,arg2,arg3);
+	return tab;
+end
+}
+
+mytable = setmetatable(mytable,mymetaTable);
+print(3333,2222,1111);
