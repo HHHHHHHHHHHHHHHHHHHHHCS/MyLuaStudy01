@@ -144,3 +144,23 @@ end
 
 mytable = setmetatable(mytable,mymetaTable);
 print(3333,2222,1111);
+
+
+print("=========================");
+
+
+
+mytable = {"Lua","Java","C#","C++","Javascript"};
+mymetaTable = 
+{
+	__tostring = function(tab)
+	local str = "";
+for k,v in pairs(tab) do
+	str=str..string.format("%s	%s\n",k,v);
+end
+	return str;
+end
+}
+
+mytable = setmetatable(mytable,mymetaTable);
+print(mytable);

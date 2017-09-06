@@ -1,4 +1,4 @@
-require "TestModule";
+require "TestModuleLua";
 --or  require ("TestModule")
 
 
