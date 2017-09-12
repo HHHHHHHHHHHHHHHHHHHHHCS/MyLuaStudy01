@@ -28,9 +28,10 @@ end
 Person.Eat(Person);
 Person:Old();
 print("========================");
-function  Person:New(  )
-	local t={};
+function  Person:New(o)
+	local t= o or {};
 	setmetatable(t,{__index=self});
+	
 	return t;
 end
 
@@ -49,3 +50,11 @@ people.weight = 100;
 people.Eat(people); 
 people:Old(); 
 print(people.weight); 
+print("========================");
+Student = Person:New();
+
+Student.grade=1;
+
+stu1=Student:New();
+
+print(stu1.grade);
