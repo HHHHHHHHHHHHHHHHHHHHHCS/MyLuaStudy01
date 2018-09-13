@@ -67,3 +67,24 @@ print(string.gsub( "Hi lua hi World  lua lua","(.)(.)","%2%1" ))
 
 s=[[then he said:"it's all right"]]
  print(string.match( s,"([\"'])(.-)%1"))
+
+ print("========================================")
+
+ function  expand1( s )
+     return (string.gsub( s,"$(%w+)",_G))
+ end
+
+ name="Lua"
+ status="great"
+ print(expand1("$name is $status,isn't great"))
+
+
+function expand2(s)
+return (string.gsub(s,"$(%w+)",function(n)
+        return tostring(_G[n])
+    end))
+end
+
+print(expand2("print=$print;a=$a"))
+
+print(string.match( "hello lua","()ll()" ))
