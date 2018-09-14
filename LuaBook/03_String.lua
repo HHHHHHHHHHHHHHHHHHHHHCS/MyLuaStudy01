@@ -37,3 +37,54 @@ print(string.format( "%d,%x,%f,%s",1,0x22,28.88,"test" ))
 
 print(string.format( "(pi)=%.4f",math.pi ))
 print(string.format( "%02d,%02d,%02d",5,11,2018 ))
+print("========================================")
+
+s="hello world"
+print(string.find( s,"world"))
+--print(string.find( "a [world]","[" ))--error
+print(string.find( "a [world]","[",_,true ))
+
+print(string.match( "hello wrold","hello"))
+print(string.match( "Today is 17/07/1990","%d+/%d+/%d+"))
+
+print(string.gsub( "Hi lua hi World  lua lua","lua","C++" ))
+print(string.gsub( "Hi lua hi World  lua lua","lua","C++" ,2))
+print("========================================")
+
+s="some string word!!!"
+words={}
+for w in string.gmatch( s,"%a+" ) do
+words[#words+1]=w
+end
+for _,v in pairs(words) do 
+    print( v)
+end
+
+print(string.match( "name = Anna","(%a+)%s*=%s*(%a+)" ))
+print(string.match( "Today is 17/07/1990","(%d+)/(%d+)/(%d+)"))
+print(string.gsub( "Hi lua hi World  lua lua","%a","%0-%0" ))
+print(string.gsub( "Hi lua hi World  lua lua","(.)(.)","%2%1" ))
+
+s=[[then he said:"it's all right"]]
+ print(string.match( s,"([\"'])(.-)%1"))
+
+ print("========================================")
+
+ function  expand1( s )
+     return (string.gsub( s,"$(%w+)",_G))
+ end
+
+ name="Lua"
+ status="great"
+ print(expand1("$name is $status,isn't great"))
+
+
+function expand2(s)
+return (string.gsub(s,"$(%w+)",function(n)
+        return tostring(_G[n])
+    end))
+end
+
+print(expand2("print=$print;a=$a"))
+
+print(string.match( "hello lua","()ll()" ))
