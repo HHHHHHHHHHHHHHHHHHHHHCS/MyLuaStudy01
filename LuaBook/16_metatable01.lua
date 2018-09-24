@@ -96,3 +96,17 @@ print(s1 >= s2)
 print(s1 <= s2)
 print(s1 > s1)
 print(s1 == s1 * s2)
+
+print("===================")
+
+print({})
+mt.__tostring=Set.tostring
+
+s1=Set.new{10,4,5}
+print(s1)
+
+mt.__metatable="not your business"
+
+s1=Set.new{}
+print(getmetatable(s1))
+--setmetatable(s1, {})--ERROR:
