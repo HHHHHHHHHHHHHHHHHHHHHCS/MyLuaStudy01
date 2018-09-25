@@ -51,6 +51,9 @@ print(string.gsub( "Hi lua hi World  lua lua","lua","C++" ))
 print(string.gsub( "Hi lua hi World  lua lua","lua","C++" ,2))
 print("========================================")
 
+s="aa/bb/cc/dd/ee/ff"
+print(string.gsub(s, "/", ""))
+
 s="some string word!!!"
 words={}
 for w in string.gmatch( s,"%a+" ) do
