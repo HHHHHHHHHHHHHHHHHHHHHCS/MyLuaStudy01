@@ -68,6 +68,6 @@ setmetatable(
 )
 
 
-print(z)--error:
-mm={}--error:
+--print(z)--error:
+mm={}--
 
