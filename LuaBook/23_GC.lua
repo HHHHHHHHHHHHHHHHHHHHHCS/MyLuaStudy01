@@ -73,3 +73,81 @@ function factory(o)
     end
     return res
 end
+print("======================")
+o = {x = "hi"}
+setmetatable(
+    o,
+    {__gc = function(o)
+            print(o, o.x)
+        end}
+)
+o = nil
+collectgarbage()
+print("======================")
+o = {x = "hi"}
+mt = {}
+setmetatable(o, mt)
+mt.__gc = function(o)
+    print(o, x)
+end
+o = nil
+collectgarbage()
+print("======================")
+o = {x = "hi"}
+mt = {__gc = true}
+setmetatable(o, mt)
+mt.__gc = function(o) print(o.x) end
+o=nil
+collectgarbage()
+print("======================")
+mt={__gc=function(o)print(o[1])end}
+list=nil
+for i=1,3 do
+    list=setmetatable({i,link=list}, mt)
+end
+list=nil
+collectgarbage()
+print("=======================")
+
+A={x="this is A"}
+B={f=A}
+setmetatable(B, {__gc=function(o)print(o.f.x)end})
+A,B=nil
+collectgarbage(  )
+print("===========================")
+local t={__gc=function (  )
+    print("finishing Lua program")
+end}
+setmetatable(t, t)
+_G["*AA*"]=t
+print("===========================")
+--[[
+do
+    local mt ={__gc=function(o)
+        print("new cycle")
+        setmetatable({},getmetatable(o))
+    end}
+    setmetatable({},mt)
+end
+
+collectgarbage()
+collectgarbage()
+collectgarbage()
+--]]
+print("===========================")
+local count=0
+local mt = {__gc=function() count = count -1 end}
+local a ={}
+
+for i=1,10000 do 
+    count = count +1 
+    a[i]=setmetatable({},mt)
+end
+
+collectgarbage()
+print(collectgarbage("count")*1024,count)
+a = nil
+collectgarbage()
+print(collectgarbage("count")*1024,count)
+collectgarbage()
+print(collectgarbage("count")*1024,count)
