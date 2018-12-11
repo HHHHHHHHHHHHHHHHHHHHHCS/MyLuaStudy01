@@ -70,3 +70,71 @@ end
 for func, count in pairs(Counters) do
     print(getname(func), count)
 end
+
+print("sanbox", "===================================")
+
+-- 内存检测方法一  通调用指令的数量 如果用for循环会检测失误
+local debug = require("debug")
+
+local stepLimit = 1000 --最大能够step指令的数量
+local count = 0 --计数器
+local function step()
+    count = count + 1
+    if count > stepLimit then
+        error("script uses too much cpu")
+    end
+end
+
+local f = assert(loadfile("fileName", "t", {})) --filename
+debug.sethook(step, "", 100) --设置钩子 "",100 为每执行100次指令就调用一次钩子
+f()
+
+--内存检测方法二 同时检测内存 和step
+local memLimit = 1000 --最大的内存 KB
+local stepLimit = 1000 --最大能够执行的step指令数量
+
+local function checkmem()
+    if collectgarbage("count") > memLimit then
+        error("script uses too much memory")
+    end
+end
+
+local count = 0
+local function step()
+    checkmem()
+    count = count + 1
+    if count > stepLimit then
+        error("script uses too much cpu")
+    end
+end
+
+local f = assert(loadfile("fileName", "t", {})) --filename
+debug.sethook(step, "", 100) --设置钩子 "",100 为每执行100次指令就调用一次钩子
+f()
+
+--内存检测方法三  拦截未授权的方法
+local debug = require("debug")
+local stepLimit = 1000 --最大能够执行的steps
+local count = 0 --计数器
+--设置授权的函数
+local validfunc = {
+    [string.upper] = true,
+    [string.lower] = true
+}
+
+local function hook(event)
+    if event == "call" then
+        local info = debug.getinfo(2, "fn")
+        if not validfunc[info.func] then
+            error("calling bad  function:" .. (info.name or "?"))
+        end
+    end
+    count = count + 1
+    if count > stepLimit then
+        error("scrtipts uses too much cpu")
+    end
+end
+
+local f = assert(loadfile("fileName", "t", {})) --filename
+debug.sethook(step, "", 100) --设置钩子 "",100 为每执行100次指令就调用一次钩子
+f()
