@@ -44,3 +44,74 @@ function receive(connection)
     end
     return s or partial, status
 end
+
+print("调度器", "-------------------------------------")
+
+task = {} --所有活跃任务的列表
+
+function Get(host, file)
+    --为任务创建协程
+    local co =
+        coroutine.wrap(
+        function()
+            download(hose, file)
+        end
+    )
+
+    --插入活跃任务列表
+    table.insert(tasks, co)
+end
+
+function Dispatch()
+    local i = 1
+    while true do
+        if tasks[i] == nil then --当前任务做完要么到最后任务了
+            if tasks[1] == nil then --列表为空?
+                break --退出循环
+            end
+            i = 1 --继续执行循环
+        end
+
+        local res = tasks[i]()
+        if not res then
+            table.remove(tasks, i)
+        else
+            i = i + 1
+        end
+    end
+end
+
+Get("www.lua.org", "/ftp/lua-5.3.2.tar.gz")
+Get("www.lua.org", "/ftp/lua-5.3.1.tar.gz")
+Get("www.lua.org", "/ftp/lua-5.3.0.tar.gz")
+Get("www.lua.org", "/ftp/lua-5.3.0.tar.gz")
+Get("www.lua.org", "/ftp/lua-5.2.4.tar.gz")
+Get("www.lua.org", "/ftp/lua-5.2.3.tar.gz")
+Dispatch()
+
+print("select调度器", "-----------------------------")
+
+function Dispatch()
+    local i = 1
+    local timeout = {}
+    while true do
+        if tasks[i] == nil then
+            if tasks[1] == nil then
+                break
+            end
+            i = 1
+            timeout = {}
+        end
+
+        local res = tasks[i]()
+        if not res then
+            table.remove(tasks, i)
+        else
+            i = i + 1
+            timedout[#timedout + 1] = res
+            if #timedout == #tasks then --所有任务都阻塞了?
+                socket.select(timeout)
+            end
+        end
+    end
+end
